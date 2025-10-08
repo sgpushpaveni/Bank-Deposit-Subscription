@@ -5,3 +5,4 @@ lightgbm
 shap
 streamlit
 joblib
+streamlit_option_menu
