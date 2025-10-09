@@ -6,5 +6,5 @@ shap
 streamlit
 joblib
 streamlit_option_menu
-XGBoost
-preprocessor
+XGBoost.joblib
+preprocessor.joblib
