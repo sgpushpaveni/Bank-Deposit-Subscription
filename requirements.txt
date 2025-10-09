@@ -4,7 +4,5 @@ xgboost
 lightgbm
 shap
 streamlit
-joblib
+joblib==1.5.0
 streamlit_option_menu
-XGBoost.joblib
-preprocessor.joblib
