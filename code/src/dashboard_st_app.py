@@ -64,8 +64,21 @@ with st.sidebar:
 if opt_selected == "File Upload":
     test_data_path = data_file_path + r"/test.csv"
 
+    uploaded_file = st.file_uploader("Choose a test data file", type=["csv"])
+    input_df = pd.DataFrame()
 
-    input_df = pd.read_csv(test_data_path)
+    if uploaded_file is not None:
+        # Read the uploaded file into a pandas DataFrame.
+        try:
+            input_df = pd.read_csv(uploaded_file)
+            st.write("### Uploaded DataFrame")
+            # Display the DataFrame.
+            st.dataframe(df)
+        except Exception as e:
+            st.error(f"Error reading the file: {e}")
+
+
+    #input_df = pd.read_csv(test_data_path)
     input_df['balance_x_duration'] = input_df['balance'] * input_df['duration']
     input_df['age_x_education'] = input_df['age'] * input_df['education'].map({'unknown':0, 'primary':1, 'secondary':2, 'tertiary':3})
 
