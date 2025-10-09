@@ -1,8 +1,10 @@
 pandas
-scikit-learn
+scikit-learn==1.6.1
 xgboost
 lightgbm
 shap
 streamlit
 joblib
 streamlit_option_menu
+XGBoost.joblib
+preprocessor.joblib
