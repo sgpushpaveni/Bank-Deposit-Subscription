@@ -73,28 +73,29 @@ if opt_selected == "File Upload":
             input_df = pd.read_csv(uploaded_file)
             st.write("### Uploaded DataFrame")
             # Display the DataFrame.
-            st.dataframe(df)
+            st.dataframe(input_df)
+            #input_df = pd.read_csv(test_data_path)
+            input_df['balance_x_duration'] = input_df['balance'] * input_df['duration']
+            input_df['age_x_education'] = input_df['age'] * input_df['education'].map({'unknown':0, 'primary':1, 'secondary':2, 'tertiary':3})
+
+            #st.write(input_df)
+            # Preprocess
+            X_processed = preprocessor.transform(input_df)
+            #st.write(X_processed)
+            prediction = model.predict(X_processed)
+            probability = model.predict_proba(X_processed)
+            pred_df = pd.DataFrame(prediction, columns=["pred"])
+            prob_df = pd.DataFrame(probability, columns=["Failure Rate", "Success Rate"])
+            #st.dataframe(pred_df)
+            #st.dataframe(prob_df)
+            df_combined = pd.concat([pred_df,prob_df["Success Rate"], input_df], axis=1)
+            out_df = df_combined.sort_values(by="Success Rate", ascending=False)
+            st.dataframe(out_df)
         except Exception as e:
             st.error(f"Error reading the file: {e}")
 
 
-    #input_df = pd.read_csv(test_data_path)
-    input_df['balance_x_duration'] = input_df['balance'] * input_df['duration']
-    input_df['age_x_education'] = input_df['age'] * input_df['education'].map({'unknown':0, 'primary':1, 'secondary':2, 'tertiary':3})
-
-    #st.write(input_df)
-    # Preprocess
-    X_processed = preprocessor.transform(input_df)
-    #st.write(X_processed)
-    prediction = model.predict(X_processed)
-    probability = model.predict_proba(X_processed)
-    pred_df = pd.DataFrame(prediction, columns=["pred"])
-    prob_df = pd.DataFrame(probability, columns=["Failure Rate", "Success Rate"])
-    #st.dataframe(pred_df)
-    #st.dataframe(prob_df)
-    df_combined = pd.concat([pred_df,prob_df["Success Rate"], input_df], axis=1)
-    out_df = df_combined.sort_values(by="Success Rate", ascending=False)
-    st.dataframe(out_df)
+    
 
 elif opt_selected == "Single Data":
     # Collect inputs
