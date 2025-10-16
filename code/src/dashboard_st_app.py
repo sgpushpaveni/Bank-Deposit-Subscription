@@ -135,7 +135,7 @@ elif opt_selected == "Single Client":
     st.write(f"**Prediction:** {'Subscribed' if prediction == 1 else 'Not Subscribed'}")
     st.write(f"**Probability:** {probability:.2f}")
 
-elif opt_selected == "API":
+elif opt_selected == "Use of API":
     # Collect inputs
     age = st.number_input("Age", 18, 99, 35)
     balance = st.number_input("Balance", -10000, 100000, 0)
