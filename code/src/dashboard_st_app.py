@@ -58,15 +58,15 @@ preprocessor = joblib.load("preprocessor.joblib")
 with st.sidebar:
     opt_selected = option_menu(
         menu_title="Data type",
-        options=["File Upload", "Single Data", "API"],
+        options=["File Upload", "Single Client", "Use of API"],
         icons=["list", "gear","gear" ],
         menu_icon="cast",
         default_index=0,
     )
 if opt_selected == "File Upload":
-    test_data_path = data_file_path + r"/test.csv"
+    #test_data_path = data_file_path + r"/test.csv"
 
-    uploaded_file = st.file_uploader("Choose a test data file", type=["csv"])
+    uploaded_file = st.file_uploader("Choose the data file", type=["csv"])
     input_df = pd.DataFrame()
 
     if uploaded_file is not None:
@@ -86,17 +86,18 @@ if opt_selected == "File Upload":
             #st.write(X_processed)
             prediction = model.predict(X_processed)
             probability = model.predict_proba(X_processed)
-            pred_df = pd.DataFrame(prediction, columns=["pred"])
+            pred_df = pd.DataFrame(prediction, columns=["Subscribe"])
             prob_df = pd.DataFrame(probability, columns=["Failure Rate", "Success Rate"])
             #st.dataframe(pred_df)
             #st.dataframe(prob_df)
             df_combined = pd.concat([pred_df,prob_df["Success Rate"], input_df], axis=1)
             out_df = df_combined.sort_values(by="Success Rate", ascending=False)
+            st.subheader("###Prediction Results (with newly added columns Subscribe and Success Rate)")
             st.dataframe(out_df)
         except Exception as e:
             st.error(f"Error reading the file: {e}")
 
-elif opt_selected == "Single Data":
+elif opt_selected == "Single Client":
     # Collect inputs
     age = st.number_input("Age", 18, 99, 35)
     balance = st.number_input("Balance", -10000, 100000, 0)
@@ -130,7 +131,7 @@ elif opt_selected == "Single Data":
     st.write(X_processed)
     prediction = model.predict(X_processed)[0]
     probability = model.predict_proba(X_processed)[0, 1]
-
+    st.subheader("Prediction Result: ")
     st.write(f"**Prediction:** {'Subscribed' if prediction == 1 else 'Not Subscribed'}")
     st.write(f"**Probability:** {probability:.2f}")
 
@@ -153,9 +154,6 @@ elif opt_selected == "API":
     previous = st.number_input("Number of Previous Contacts", 0, 10, 0)
     poutcome = st.selectbox("Previous Outcome", ["unknown", "other", "failure", "success"])
 
-    st.button("Predict")
-
-    
 
     #api_url = "http://127.0.0.1:8000/predict"  
     #api_url = "http://bank-deposit-subscription-production.up.railway.app:8000/predict"
@@ -171,26 +169,8 @@ elif opt_selected == "API":
     response = requests.post(api_url, json=data)
     if response.status_code == 200:
         result = response.json()
+        st.subheader("Prediction Result: ")
         st.write(f"**Prediction:** {'Subscribed' if result['prediction']==1 else 'Not Subscribed'}")
         st.write(f"**Probability:** {result['probability']:.2f}")
     else:
         st.error("API Error: " + str(response.status_code))
-
-#     {
-#   "age": 0,
-#   "job": "string",
-#   "marital": "string",
-#   "education": "string",
-#   "default": "string",
-#   "balance": 0,
-#   "housing": "string",
-#   "loan": "string",
-#   "contact": "string",
-#   "day": 0,
-#   "month": "string",
-#   "duration": 0,
-#   "campaign": 0,
-#   "pdays": 0,
-#   "previous": 0,
-#   "poutcome": "string"
-# }
