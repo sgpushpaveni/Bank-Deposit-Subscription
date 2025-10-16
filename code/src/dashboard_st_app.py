@@ -6,6 +6,7 @@ from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 import os
+
 import requests
 
 def build_preprocessor():
